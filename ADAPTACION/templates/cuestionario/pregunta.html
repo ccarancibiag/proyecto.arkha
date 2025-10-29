@@ -1,0 +1,54 @@
+<title>Proyecto Arkha</title>
+<style>
+        body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        .estado { background: #fdfdfd; padding: 10px; border-radius: 5px; }
+        .pregunta { margin-top: 20px; }
+        .alternativas { list-style: none; padding: 0; }
+        .alternativas li { margin: 10px 0; }
+        button { padding: 10px 15px; background: #98d8b7; color: rgb(255, 255, 255); border: none; border-radius: 5px; cursor: pointer; }
+    </style>
+<h1>Pregunta</h1>
+<div class="estado">
+    <p>Nivel Actual: {{ nivel }}</p>
+    <p>Correctas: {{ correctas }}</p>
+    <p>Incorrectas: {{ incorrectas }}</p>
+</div>
+{% if pregunta%}
+<div class="pregunta">
+    <h3> {{pregunta.pregunta}} </h3>
+    <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
+    <form method="post" value ="{{pregunta.id}}">
+        <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
+        {% csrf_token %}
+        <ul class="alternativas">
+                <li>
+                    <label>
+                        <input type="radio" name="respuesta" value="A" required>
+                        {{pregunta.alternativa_a}}
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="respuesta" value="B" required>
+                        {{pregunta.alternativa_b}}
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="respuesta" value="C" required>
+                        {{pregunta.alternativa_c}}
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="radio" name="respuesta" value="D" required>
+                        {{pregunta.alternativa_d}}
+                    </label>
+                </li>
+        </ul>
+        <button type="submit">Enviar Respuesta</button>
+    </form>
+</div>
+{% else %}
+    <p>Patatudo</p>
+{% endif %}

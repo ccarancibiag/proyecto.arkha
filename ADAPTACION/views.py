@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from .models import Question
 from random import randint
+from django.shortcuts import render, redirect
+
+
+
 
 # Create your views here.
 #Vamos a definir 4 niveles de dificultad, facil-medio-dificil-experto
@@ -16,6 +20,18 @@ def obtener_pregunta(nivel):
         return None
     return preguntas[randint(0, len(preguntas)-1)]
 
+###def evaluar_respuesta(pregunta, respuesta_usuario):
+  #  if pregunta.respuesta_correcta == respuesta_usuario:
+    #    correctas += 1
+    #    incorrectas = 0
+    #    resultado = True
+   # else:
+       # incorrectas += 1
+      #  correctas = 0
+     #   resultado = False
+  #  nivel, correctas, incorrectas = cambiar_nivel(nivel, correctas, incorrectas)
+  #  return resultado
+#####
 
 #aqui si respondemos bien sumamos 1 a correctas, si no a incorrectas, si acertamos 
 #3 seguidas subimos de nivel, si fallamos 3 seguidas bajamos de nivel, porahora dejemoslo asi digo
@@ -38,6 +54,38 @@ def cambiar_nivel(nivel, correctas, incorrectas):
         incorrectas = 0
     return nivel, correctas, incorrectas
 
+##por terminar##
+def presentar_preguntas(request): 
+    nivel= request.session.get('nivel', 'experto')
+    correctas= request.session.get('correctas', 0)
+    incorrectas= request.session.get('incorrectas', 0)  
+    if request.method == 'POST':
+        respuesta_usuario= request.POST.get('respuesta')
+        pregunta_id= request.POST.get('pregunta_id')
+        pregunta_respondida = Question.objects.filter(id=pregunta_id).first()
+        if pregunta_respondida:
+            if pregunta_respondida.respuesta_correcta == respuesta_usuario:
+                correctas += 1
+                incorrectas = 0
+            else:
+                incorrectas += 1
+                correctas = 0
+        nivel, correctas, incorrectas = cambiar_nivel(nivel, correctas, incorrectas)
+        request.session['nivel'] = nivel
+        request.session['correctas'] = correctas
+        request.session['incorrectas'] = incorrectas
+        return redirect("presentar_preguntas")
+    else: 
+        
+        pregunta = obtener_pregunta(nivel)
+        context = {
+            'pregunta': pregunta,
+            'nivel': nivel,
+            'correctas': correctas,
+            'incorrectas': incorrectas,
+        }
+        
+        return render(request, 'cuestionario/pregunta.html', context)
 
 
     
