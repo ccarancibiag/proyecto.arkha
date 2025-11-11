@@ -14,10 +14,10 @@ UNICASRESPUESTAS=[
 ]
 
 DIFICULTADES=[
-    ('facil', 'facil'),
-    ('medio', 'medio'),
-    ('dificil', 'dificil'),
-    ('experto', 'experto'),
+    ('Facil', 'Facil'),
+    ('Medio', 'Medio'),
+    ('Dificil', 'Dificil'),
+    ('Experto', 'Experto'),
 ] 
 
 class Question(models.Model):

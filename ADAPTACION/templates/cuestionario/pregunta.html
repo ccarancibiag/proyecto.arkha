@@ -1,54 +1,142 @@
-<title>Proyecto Arkha</title>
-<style>
-        body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        .estado { background: #fdfdfd; padding: 10px; border-radius: 5px; }
-        .pregunta { margin-top: 20px; }
-        .alternativas { list-style: none; padding: 0; }
-        .alternativas li { margin: 10px 0; }
-        button { padding: 10px 15px; background: #98d8b7; color: rgb(255, 255, 255); border: none; border-radius: 5px; cursor: pointer; }
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <title>Proyecto Arkha</title>
+    <style>
+      body {
+        background-image: url("{% static 'images/playa_fondo.jpg' %}");
+        animation: scroll-playa 60s linear infinite;
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+
+      @keyframes scroll-playa {
+        from {
+          background-position: 0 0;
+        }
+        to {
+          background-position: -3840px 0;
+        }
+      }
+
+      .contenedor {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background: white;
+      }
+
+      .estado {
+        background: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .pregunta {
+        margin-top: 20px;
+      }
+
+      .alternativas {
+        list-style: none;
+        padding: 0;
+      }
+
+      .alternativas li {
+        margin: 10px 0;
+      }
+
+      button {
+        padding: 10px 15px;
+        background: #475fff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .messages {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 20px 0;
+      }
+
+      .messages li {
+        padding: 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .messages li.error {
+        background: #f8d7da;
+        color: #721c24;
+      }
     </style>
-<h1>Pregunta</h1>
-<div class="estado">
-    <p>Nivel Actual: {{ nivel }}</p>
-    <p>Correctas: {{ correctas }}</p>
-    <p>Incorrectas: {{ incorrectas }}</p>
-</div>
-{% if pregunta%}
-<div class="pregunta">
-    <h3> {{pregunta.pregunta}} </h3>
-    <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
-    <form method="post" value ="{{pregunta.id}}">
-        <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
-        {% csrf_token %}
-        <ul class="alternativas">
-                <li>
-                    <label>
-                        <input type="radio" name="respuesta" value="A" required>
-                        {{pregunta.alternativa_a}}
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" name="respuesta" value="B" required>
-                        {{pregunta.alternativa_b}}
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" name="respuesta" value="C" required>
-                        {{pregunta.alternativa_c}}
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" name="respuesta" value="D" required>
-                        {{pregunta.alternativa_d}}
-                    </label>
-                </li>
-        </ul>
-        <button type="submit">Enviar Respuesta</button>
-    </form>
-</div>
-{% else %}
-    <p>Patatudo</p>
-{% endif %}
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  </head>
+  <body>
+    <div class="contenedor">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+
+      <h1>Pregunta</h1>
+
+      <div class="estado">
+        <p>Nivel Actual: {{ nivel }}</p>
+        <p><strong>Racha de respuestas consecutivas:</strong></p>
+        <p>Correctas: {{ correctas }}</p>
+        <p>Incorrectas: {{ incorrectas }}</p>
+      </div>
+
+      {% if pregunta %}
+      <div class="pregunta">
+        <h3>{{ pregunta.pregunta }}</h3>
+        <form method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
+          <ul class="alternativas">
+            <li>
+              <label>
+                <input type="radio" name="respuesta" value="A" required>
+                {{ pregunta.alternativa_a }}
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="respuesta" value="B" required>
+                {{ pregunta.alternativa_b }}
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="respuesta" value="C" required>
+                {{ pregunta.alternativa_c }}
+              </label>
+            </li>
+            <li>
+              <label>
+                <input type="radio" name="respuesta" value="D" required>
+                {{ pregunta.alternativa_d }}
+              </label>
+            </li>
+          </ul>
+          <button type="submit">Enviar Respuesta</button>
+        </form>
+      </div>
+      {% else %}
+      <h2>No hay preguntas para este nivel</h2>
+      {% endif %}
+    </div>
+  </body>
+</html>
