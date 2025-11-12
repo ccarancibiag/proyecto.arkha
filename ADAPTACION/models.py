@@ -20,6 +20,11 @@ DIFICULTADES=[
     ('Experto', 'Experto'),
 ] 
 
+tipos = [
+    ('trigonometria', 'trigonometria'), 
+    ('álgebra', 'álgebra'), 
+    ('estadística', 'estadística')]
+
 class Question(models.Model):
     pregunta = models.TextField() #sin limite de caracteres
     respuesta_correcta = models.CharField(max_length=1, choices=UNICASRESPUESTAS)
@@ -28,6 +33,7 @@ class Question(models.Model):
     alternativa_c = models.CharField(max_length=255)
     alternativa_d = models.CharField(max_length=255)
     dificultad = models.CharField(max_length=50, choices=DIFICULTADES, db_index=True)
+    tipo = models.CharField(max_length=100, choices=tipos, default='álgebra', db_index=True)
 #db_index=True hace que se pueda buscar mas rapido en la base de datos por ese campo
 #Como vamos anadir cosas manualmentea la base de datos desde admin no hace falta __str__
 def __str__(self):
