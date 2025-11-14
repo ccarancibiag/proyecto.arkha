@@ -60,35 +60,61 @@ def presentar_preguntas(request):
     nivel= request.session.get('nivel', 'Experto')
     correctas= request.session.get('correctas', 0)
     incorrectas= request.session.get('incorrectas', 0)  
+
+    stats_tipos = request.session.get('stats_tipos', {
+        'trigonometria': {'total': 0, 'correctas': 0},
+        'álgebra':       {'total': 0, 'correctas': 0},
+        'estadística':   {'total': 0, 'correctas': 0},
+    })
+    
     if request.method == 'POST':
         respuesta_usuario= request.POST.get('respuesta')
         pregunta_id= request.POST.get('pregunta_id')
         pregunta_respondida = Question.objects.filter(id=pregunta_id).first()
         if pregunta_respondida:
+            tipo = pregunta_respondida.tipo     
             if pregunta_respondida.respuesta_correcta == respuesta_usuario:
                 correctas += 1
                 incorrectas = 0
+                messages.success(request, '¡Respuesta correcta!')
+                stats_tipos[tipo]['total'] += 1
+                stats_tipos[tipo]['correctas'] += 1
             else:
                 alternativa_correcta= "alternativa_" + pregunta_respondida.respuesta_correcta
                 recorreccion= getattr(pregunta_respondida, alternativa_correcta)
                 messages.error(request, 'Respuesta incorrecta. La respuesta correcta era: ' + recorreccion)
-
+                stats_tipos[tipo]['total'] += 1
+                
                 incorrectas += 1
                 correctas = 0
                 messages.error(request, 'Respuesta incorrecta. La respuesta correcta era: ' + pregunta_respondida.respuesta_correcta)
+    
         nivel, correctas, incorrectas = cambiar_nivel(nivel, correctas, incorrectas)
         request.session['nivel'] = nivel
         request.session['correctas'] = correctas
         request.session['incorrectas'] = incorrectas
+        request.session['stats_tipos'] = stats_tipos
         return redirect("presentar_preguntas")
     else: 
-        
+        for tipo, datos in stats_tipos.items():
+            total = datos.get('total', 0)
+            correctas_tipo = datos.get('correctas', 0)
+            if total == 0:
+                porcentaje = 0
+            else:
+                porcentaje = (correctas_tipo / total) * 100
+            stats_tipos[tipo] = {
+                'total': total,
+                'correctas': correctas_tipo,
+                'porcentaje': porcentaje,
+            }
         pregunta = obtener_pregunta(nivel)
         context = {
             'pregunta': pregunta,
             'nivel': nivel,
             'correctas': correctas,
             'incorrectas': incorrectas,
+            'stats_tipos': stats_tipos,
         }
         
         return render(request, 'cuestionario/pregunta.html', context)

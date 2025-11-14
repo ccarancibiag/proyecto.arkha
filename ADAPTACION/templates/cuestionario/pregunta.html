@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Proyecto Arkha</title>
     <style>
-      body {
+            body {
         background-image: url("{% static 'images/playa_fondo.jpg' %}");
         animation: scroll-playa 60s linear infinite;
         margin: 0;
@@ -77,6 +77,26 @@
         color: #721c24;
       }
     </style>
+    <div style="
+    position: absolute; 
+    top: 20px; 
+    right: 20px; 
+    background: #f0f0f0; 
+    padding: 12px 15px; 
+    border-radius: 8px; 
+    border: 1px solid #ccc;
+    box-shadow: 0px 0px 8px rgba(0,0,0,0.15);
+    font-family: 'Courier New', monospace;
+    text-transform: uppercase;
+    text-align: right;
+    ">
+    {% for tipo, datos in stats_tipos.items %}
+        <p style="margin: 2px 0;">
+            {{ tipo }}: {{ datos.porcentaje }}% ({{ datos.correctas }}/{{ datos.total }})
+        </p>
+    {% endfor %}
+</div>
+
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   </head>
