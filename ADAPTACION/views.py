@@ -11,7 +11,7 @@ from django.contrib import messages
 #Vamos a definir 4 niveles de dificultad, facil-medio-dificil-experto
 #iniciaremos con el nivel dificil, pues si acierta sabremos que tendra un buen nivel
 #sino acertara, bajaremos a medio y luego a facil.
-nivel = 'Facil'
+nivel = 'experto'
 correctas = 0
 incorrectas = 0
 
@@ -87,7 +87,6 @@ def presentar_preguntas(request):
                 
                 incorrectas += 1
                 correctas = 0
-                messages.error(request, 'Respuesta incorrecta. La respuesta correcta era: ' + pregunta_respondida.respuesta_correcta)
     
         nivel, correctas, incorrectas = cambiar_nivel(nivel, correctas, incorrectas)
         request.session['nivel'] = nivel
@@ -119,5 +118,13 @@ def presentar_preguntas(request):
         
         return render(request, 'cuestionario/pregunta.html', context)
 
-
-    
+def reiniciar(request):
+    request.session['nivel'] = 'Experto'  
+    request.session['correctas'] = 0
+    request.session['incorrectas'] = 0
+    request.session['stats_tipos'] = {
+        'trigonometria': {'total': 0, 'correctas': 0},
+        'álgebra':       {'total': 0, 'correctas': 0},
+        'estadística':   {'total': 0, 'correctas': 0},
+    }
+    return redirect("presentar_preguntas")

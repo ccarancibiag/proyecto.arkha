@@ -7,10 +7,10 @@ from django.db import models
 #CharField indica que es texto, max_length es la longitud maxima del texto
 #lo de aca abajo Hace que no haya problemas al guardar en la base de datos
 UNICASRESPUESTAS=[
-    ('a', 'a'),
-    ('b', 'b'),
-    ('c', 'c'),
-    ('d', 'd'),
+    ('A', 'A'),
+    ('B', 'B'),
+    ('C', 'C'),
+    ('D', 'D'),
 ]
 
 DIFICULTADES=[
@@ -28,10 +28,10 @@ tipos = [
 class Question(models.Model):
     pregunta = models.TextField() #sin limite de caracteres
     respuesta_correcta = models.CharField(max_length=1, choices=UNICASRESPUESTAS)
-    alternativa_a = models.CharField(max_length=255)
-    alternativa_b = models.CharField(max_length=255)
-    alternativa_c = models.CharField(max_length=255)
-    alternativa_d = models.CharField(max_length=255)
+    alternativa_A = models.CharField(max_length=255)
+    alternativa_B = models.CharField(max_length=255)
+    alternativa_C = models.CharField(max_length=255)
+    alternativa_D = models.CharField(max_length=255)
     dificultad = models.CharField(max_length=50, choices=DIFICULTADES, db_index=True)
     tipo = models.CharField(max_length=100, choices=tipos, default='álgebra', db_index=True)
 #db_index=True hace que se pueda buscar mas rapido en la base de datos por ese campo

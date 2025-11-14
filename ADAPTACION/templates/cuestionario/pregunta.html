@@ -129,25 +129,25 @@
             <li>
               <label>
                 <input type="radio" name="respuesta" value="A" required>
-                {{ pregunta.alternativa_a }}
+                {{ pregunta.alternativa_A }}
               </label>
             </li>
             <li>
               <label>
                 <input type="radio" name="respuesta" value="B" required>
-                {{ pregunta.alternativa_b }}
+                {{ pregunta.alternativa_B }}
               </label>
             </li>
             <li>
               <label>
                 <input type="radio" name="respuesta" value="C" required>
-                {{ pregunta.alternativa_c }}
+                {{ pregunta.alternativa_C }}
               </label>
             </li>
             <li>
               <label>
                 <input type="radio" name="respuesta" value="D" required>
-                {{ pregunta.alternativa_d }}
+                {{ pregunta.alternativa_D }}
               </label>
             </li>
           </ul>
@@ -157,6 +157,13 @@
       {% else %}
       <h2>No hay preguntas para este nivel</h2>
       {% endif %}
+    </div>
+    <div style="margin-bottom: 20px;">
+      <a href="/reiniciar/">
+        <button type="button" style="background: #ff4747;">
+          Reiniciar cuestionario
+        </button>
+      </a>
     </div>
   </body>
 </html>
