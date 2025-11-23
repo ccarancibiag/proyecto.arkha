@@ -5,23 +5,6 @@
     <meta charset="UTF-8">
     <title>Proyecto Arkha</title>
     <style>
-            body {
-        background-image: url("{% static 'images/playa_fondo.jpg' %}");
-        animation: scroll-playa 60s linear infinite;
-        margin: 0;
-        padding: 0;
-        font-family: sans-serif;
-      }
-
-      @keyframes scroll-playa {
-        from {
-          background-position: 0 0;
-        }
-        to {
-          background-position: -3840px 0;
-        }
-      }
-
       .contenedor {
         max-width: 800px;
         margin: 20px auto;
@@ -96,9 +79,19 @@
         </p>
     {% endfor %}
 </div>
-
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <head>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          }
+        };
+    </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
   </head>
   <body>
     <div class="contenedor">
@@ -121,7 +114,7 @@
 
       {% if pregunta %}
       <div class="pregunta">
-        <h3>{{ pregunta.pregunta }}</h3>
+        <h3>{{ pregunta.pregunta | safe}}</h3>
         <form method="POST">
           {% csrf_token %}
           <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
@@ -129,25 +122,25 @@
             <li>
               <label>
                 <input type="radio" name="respuesta" value="A" required>
-                {{ pregunta.alternativa_A }}
+                {{ pregunta.alternativa_A | safe }}
               </label>
             </li>
             <li>
               <label>
                 <input type="radio" name="respuesta" value="B" required>
-                {{ pregunta.alternativa_B }}
+                {{ pregunta.alternativa_B |safe }}
               </label>
             </li>
             <li>
               <label>
                 <input type="radio" name="respuesta" value="C" required>
-                {{ pregunta.alternativa_C }}
+                {{ pregunta.alternativa_C |safe }}
               </label>
             </li>
             <li>
               <label>
                 <input type="radio" name="respuesta" value="D" required>
-                {{ pregunta.alternativa_D }}
+                {{ pregunta.alternativa_D |safe }}
               </label>
             </li>
           </ul>
