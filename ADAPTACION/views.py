@@ -66,11 +66,14 @@ def presentar_preguntas(request):
         'álgebra':       {'total': 0, 'correctas': 0},
         'estadística':   {'total': 0, 'correctas': 0},
     })
-    
+    mostrar_pez = request.session.pop('mostrar_pez', False)
+
     if request.method == 'POST':
         respuesta_usuario= request.POST.get('respuesta')
         pregunta_id= request.POST.get('pregunta_id')
         pregunta_respondida = Question.objects.filter(id=pregunta_id).first()
+        nivel_anterior = nivel
+
         if pregunta_respondida:
             tipo = pregunta_respondida.tipo     
             if pregunta_respondida.respuesta_correcta == respuesta_usuario:
@@ -87,8 +90,13 @@ def presentar_preguntas(request):
                 
                 incorrectas += 1
                 correctas = 0
-    
+
+
         nivel, correctas, incorrectas = cambiar_nivel(nivel, correctas, incorrectas)
+
+        if nivel != nivel_anterior:
+            request.session['mostrar_pez'] = True
+   
         request.session['nivel'] = nivel
         request.session['correctas'] = correctas
         request.session['incorrectas'] = incorrectas
@@ -114,6 +122,7 @@ def presentar_preguntas(request):
             'correctas': correctas,
             'incorrectas': incorrectas,
             'stats_tipos': stats_tipos,
+            'mostrar_pez': mostrar_pez,
         }
         
         return render(request, 'cuestionario/pregunta.html', context)

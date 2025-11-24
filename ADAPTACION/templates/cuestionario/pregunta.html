@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,6 +16,39 @@
     <script id="MathJax-script" async 
             src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
+    <style>
+.video-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -100; 
+    overflow: hidden;
+}
+
+.fondo-pantalla {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%); 
+    object-fit: cover;
+    z-index: -100; 
+}
+
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2); 
+    z-index: -99; 
+}
+    </style>
 
     <style>
 
@@ -27,17 +61,19 @@
         }
 
         .arkha-title {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            font-family: "PixelFont", monospace;
-            font-size: 60px;
-            color: black;
-            text-shadow: 5px 5px 0px white;
-            image-rendering: pixelated;
-            user-select: none;
-            z-index: 9999;
-        }
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+    user-select: none;
+}
+
+.arkha-title img {
+    display: block;
+    max-width: 200px; /* Ajusta este número si el logo queda muy grande o chico */
+    height: auto;
+    image-rendering: pixelated; /* Mantiene los pixeles nítidos */
+}
 
 
         /*        ESTILOS BASE       */
@@ -57,13 +93,22 @@
         }
 
         .contenedor {
-            max-width: 750px;
+          max-width: 750px;
             margin: auto;
-            background: #fff;
-            padding: 25px;
+
             margin-top: 25px;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background-color: transparent; 
+            box-shadow: none;              
+            border-radius: 0;
+            border-style: solid;
+            border-color: transparent;
+            border-width: 40px;
+            border-image-source: url("{% static 'images/marco.png' %}");
+            border-image-slice: 40 fill;
+            border-image-repeat: round;
+            padding: 20px;
+            
+
         }
 
         .stats-box {
@@ -72,10 +117,14 @@
             text-align: center;
             padding: 10px;
             margin-top: 20px;
-            background: #ffffffd5;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+
+            background: #ffffff; 
+            border: 4px solid #000; 
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2); 
+            border-radius: 0;
         }
+
+
 
         .stats-box p {
             margin: 5px 0;
@@ -217,8 +266,87 @@
 </head>
 
 <body>
+  {% load static %} 
+  <div class="video-background">
+    {% if nivel == "Experto" %}
+        <video autoplay muted loop playsinline class="fondo-pantalla">
+            <source src="{% static 'videos/fondo_arkha.mp4' %}" type="video/mp4">
+        </video>
 
-<div class="arkha-title">Arkha</div>
+    {% elif nivel == "Dificil" or nivel == "Difícil" %}
+        <img src="{% static 'cuestionario/gifs/pez_fondo.gif' %}" alt="Fondo Dificil" class="fondo-pantalla">
+
+    {% elif nivel == "Medio" %}
+        <video autoplay muted loop playsinline class="fondo-pantalla">
+            <source src="{% static 'videos/fondo_medio.mp4' %}" type="video/mp4">
+        </video>
+    {% else %}
+        <img src="{% static 'cuestionario/gifs/pez_fondo.gif' %}" alt="Fondo Dificil" class="fondo-pantalla">
+    
+    {% endif %}
+
+    <div class="overlay"></div>
+</div>
+
+
+{% if mostrar_pez %}
+    <div class="pantalla-completa">
+        
+        <div class="contenido-centro">
+            <h1 style="font-size: 3em; color: #4a148c; text-shadow: 2px 2px 0px white;">
+                ¡CAMBIO DE NIVEL!
+            </h1>
+            
+                <img src="{% static 'cuestionario/gifs/pez_carga.gif' %}"
+                 alt="Celebración" 
+                 style="width: 300px; height: auto;">
+                 
+            <h2 style="font-size: 2em; color: #333;">
+                Ahora estás en: <span style="color: #4a90e2;">{{ nivel }}</span>
+            </h2>
+        </div>
+
+    </div>
+
+    <style>
+       
+        .pantalla-completa {
+            position: fixed;       
+            top: 0;
+            left: 0;
+            width: 100%;          
+            height: 100%;       
+            background-color: rgba(255, 255, 255, 0.95); 
+            z-index: 99999;       
+            
+           
+            display: flex;         
+            justify-content: center;
+            align-items: center;
+            animation: desaparecer 4s forwards; 
+        }
+
+        .contenido-centro {
+            text-align: center;
+            animation: rebote 0.5s infinite alternate; 
+        }
+
+        @keyframes desaparecer {
+            0%   { opacity: 1; }
+            70%  { opacity: 1; }  
+            100% { opacity: 0; visibility: hidden; } 
+        }
+    </style>
+{% endif %}
+
+<div class="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<div class="arkha-title">
+    <img src="{% static 'cuestionario/gifs/arkha_logo.gif' %}" alt="Arkha Logo">
+</div>
 
 <div class="stats-box">
     {% for tipo, datos in stats_tipos.items %}
@@ -237,6 +365,28 @@
     {% endif %}
 
     <h1>Pregunta</h1>
+
+
+      <style>
+        .alerta-pez {
+            text-align: center; 
+            margin: 20px auto; 
+            padding: 15px; 
+            border-radius: 8px; 
+            border: 2px solid #6a0dad; 
+            background: #f3e5f5; 
+            max-width: 400px;
+            animation: desaparecer 5s forwards; 
+        }
+
+        @keyframes desaparecer {
+            0% { opacity: 1; }
+            80% { opacity: 1; } 
+            100% { opacity: 0; visibility: hidden; } 
+        }
+      </style>
+
+    
 
     <div class="estado">
         <p><strong>Nivel Actual:</strong> {{ nivel }}</p>
