@@ -1,162 +1,280 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>Proyecto Arkha</title>
-    <style>
-      .contenedor {
-        max-width: 800px;
-        margin: 20px auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background: white;
-      }
 
-      .estado {
-        background: #f4f4f4;
-        padding: 10px;
-        border-radius: 5px;
-      }
-
-      .pregunta {
-        margin-top: 20px;
-      }
-
-      .alternativas {
-        list-style: none;
-        padding: 0;
-      }
-
-      .alternativas li {
-        margin: 10px 0;
-      }
-
-      button {
-        padding: 10px 15px;
-        background: #475fff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-
-      .messages {
-        list-style: none;
-        padding: 0;
-        margin: 0 0 20px 0;
-      }
-
-      .messages li {
-        padding: 10px;
-        border-radius: 5px;
-        font-weight: bold;
-        margin-bottom: 10px;
-      }
-
-      .messages li.error {
-        background: #f8d7da;
-        color: #721c24;
-      }
-    </style>
-    <div style="
-    position: absolute; 
-    top: 20px; 
-    right: 20px; 
-    background: #f0f0f0; 
-    padding: 12px 15px; 
-    border-radius: 8px; 
-    border: 1px solid #ccc;
-    box-shadow: 0px 0px 8px rgba(0,0,0,0.15);
-    font-family: 'Courier New', monospace;
-    text-transform: uppercase;
-    text-align: right;
-    ">
-    {% for tipo, datos in stats_tipos.items %}
-        <p style="margin: 2px 0;">
-            {{ tipo }}: {{ datos.porcentaje }}% ({{ datos.correctas }}/{{ datos.total }})
-        </p>
-    {% endfor %}
-</div>
-      <head>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script>
         window.MathJax = {
-          tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']]
-          }
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
         };
     </script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script id="MathJax-script" async 
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <style>
+
+     
+        /*  TITULO PIXEL ART ARKHA   */
+       
+        @font-face {
+            font-family: "PixelFont";
+            src: url("https://fonts.cdnfonts.com/s/9423/PressStart2P-Regular.woff") format("woff");
+        }
+
+        .arkha-title {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            font-family: "PixelFont", monospace;
+            font-size: 60px;
+            color: black;
+            text-shadow: 5px 5px 0px white;
+            image-rendering: pixelated;
+            user-select: none;
+            z-index: 9999;
+        }
+
+
+        /*        ESTILOS BASE       */
+     
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg,#bcd6ff, #7fb4ff);
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 15px;
+        }
+
+        .contenedor {
+            max-width: 750px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            margin-top: 25px;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .stats-box {
+            max-width: 750px;
+            margin: auto;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            background: #ffffffd5;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        }
+
+        .stats-box p {
+            margin: 5px 0;
+            font-size: 16px;
+            color: #444;
+        }
+
+        .estado {
+            background: #f7faff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4a90e2;
+        }
+
+        .estado p {
+            margin: 5px 0;
+        }
+
+        .pregunta {
+            margin-bottom: 20px;
+        }
+
+        .pregunta h3 {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .alternativas {
+            list-style: none;
+            padding: 0;
+        }
+
+        .alternativas li {
+            margin: 10px 0;
+        }
+
+        .alternativas label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: #f5f7fb;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .alternativas label:hover {
+            background: #eaf0ff;
+            transform: translateX(3px);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            border: none;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+
+            background: linear-gradient(135deg, #4a90e2, #3577c4);
+            color: white;
+            letter-spacing: 0.5px;
+
+            transition: all 0.3s ease, transform 0.1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 2px;
+            background: linear-gradient(135deg, #80b8ff, #4a90e2);
+            mask: linear-gradient(#fff 0 0) content-box,
+                  linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.4s ease;
+        }
+
+        button:hover::after {
+            opacity: 1;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        button:focus::before,
+        button:active::before {
+            content: "";
+            position: absolute;
+            background: rgba(255, 255, 255, 0.45);
+            width: 200%;
+            height: 200%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+            animation: ripple 0.5s linear;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .btn-red {
+            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+        }
+
+        .btn-red::after {
+            background: linear-gradient(135deg, #ff9a8a, #e74c3c);
+        }
+
+        .reiniciar {
+            max-width: 750px;
+            margin: auto;
+            margin-top: 25px;
+            margin-bottom: 40px;
+        }
+
+    </style>
+
 </head>
 
-  </head>
-  <body>
-    <div class="contenedor">
-      {% if messages %}
-      <ul class="messages">
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
+<body>
 
-      <h1>Pregunta</h1>
+<div class="arkha-title">Arkha</div>
 
-      <div class="estado">
-        <p>Nivel Actual: {{ nivel }}</p>
-        <p><strong>Racha de respuestas consecutivas:</strong></p>
-        <p>Correctas: {{ correctas }}</p>
-        <p>Incorrectas: {{ incorrectas }}</p>
-      </div>
+<div class="stats-box">
+    {% for tipo, datos in stats_tipos.items %}
+        <p>{{ tipo }}: {{ datos.porcentaje }}% ({{ datos.correctas }}/{{ datos.total }})</p>
+    {% endfor %}
+</div>
 
-      {% if pregunta %}
-      <div class="pregunta">
-        <h3>{{ pregunta.pregunta | safe}}</h3>
+<div class="contenedor">
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h1>Pregunta</h1>
+
+    <div class="estado">
+        <p><strong>Nivel Actual:</strong> {{ nivel }}</p>
+        <p><strong>Racha de Respuestas:</strong></p>
+        <p>✓ Correctas: {{ correctas }}</p>
+        <p>✗ Incorrectas: {{ incorrectas }}</p>
+    </div>
+
+    {% if pregunta %}
+    <div class="pregunta">
+        <h3>{{ pregunta.pregunta | safe }}</h3>
+
         <form method="POST">
-          {% csrf_token %}
-          <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
-          <ul class="alternativas">
-            <li>
-              <label>
-                <input type="radio" name="respuesta" value="A" required>
-                {{ pregunta.alternativa_A | safe }}
-              </label>
-            </li>
-            <li>
-              <label>
-                <input type="radio" name="respuesta" value="B" required>
-                {{ pregunta.alternativa_B |safe }}
-              </label>
-            </li>
-            <li>
-              <label>
-                <input type="radio" name="respuesta" value="C" required>
-                {{ pregunta.alternativa_C |safe }}
-              </label>
-            </li>
-            <li>
-              <label>
-                <input type="radio" name="respuesta" value="D" required>
-                {{ pregunta.alternativa_D |safe }}
-              </label>
-            </li>
-          </ul>
-          <button type="submit">Enviar Respuesta</button>
+            {% csrf_token %}
+            <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
+
+            <ul class="alternativas">
+                <li><label><input type="radio" name="respuesta" value="A"> {{ pregunta.alternativa_A|safe }}</label></li>
+                <li><label><input type="radio" name="respuesta" value="B"> {{ pregunta.alternativa_B|safe }}</label></li>
+                <li><label><input type="radio" name="respuesta" value="C"> {{ pregunta.alternativa_C|safe }}</label></li>
+                <li><label><input type="radio" name="respuesta" value="D"> {{ pregunta.alternativa_D|safe }}</label></li>
+            </ul>
+
+            <button type="submit">Enviar Respuesta</button>
         </form>
-      </div>
-      {% else %}
-      <h2>No hay preguntas para este nivel</h2>
-      {% endif %}
     </div>
-    <div style="margin-bottom: 20px;">
-      <a href="/reiniciar/">
-        <button type="button" style="background: #ff4747;">
-          Reiniciar cuestionario
-        </button>
-      </a>
-    </div>
-  </body>
+
+    {% else %}
+        <h2>No hay preguntas para este nivel</h2>
+    {% endif %}
+</div>
+
+<div class="reiniciar">
+    <a href="/reiniciar/">
+        <button class="btn-red">Reiniciar cuestionario</button>
+    </a>
+</div>
+
+</body>
 </html>
+
