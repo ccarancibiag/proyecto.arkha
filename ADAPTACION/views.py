@@ -57,20 +57,22 @@ def cambiar_nivel(nivel, correctas, incorrectas):
 
 ##por terminar##
 def presentar_preguntas(request): 
-    nivel= request.session.get('nivel', 'Experto')
-    correctas= request.session.get('correctas', 0)
-    incorrectas= request.session.get('incorrectas', 0)  
+    nivel = request.session.get('nivel', 'Experto')
+    correctas = request.session.get('correctas', 0)
+    incorrectas = request.session.get('incorrectas', 0)  
 
     stats_tipos = request.session.get('stats_tipos', {
         'trigonometria': {'total': 0, 'correctas': 0},
         'álgebra':       {'total': 0, 'correctas': 0},
         'estadística':   {'total': 0, 'correctas': 0},
     })
+    
     mostrar_pez = request.session.pop('mostrar_pez', False)
+    gif_transicion = request.session.pop('gif_transicion', 'cuestionario/gifs/pez.gif')
 
     if request.method == 'POST':
-        respuesta_usuario= request.POST.get('respuesta')
-        pregunta_id= request.POST.get('pregunta_id')
+        respuesta_usuario = request.POST.get('respuesta')
+        pregunta_id = request.POST.get('pregunta_id')
         pregunta_respondida = Question.objects.filter(id=pregunta_id).first()
         nivel_anterior = nivel
 
@@ -83,25 +85,37 @@ def presentar_preguntas(request):
                 stats_tipos[tipo]['total'] += 1
                 stats_tipos[tipo]['correctas'] += 1
             else:
-                alternativa_correcta= "alternativa_" + pregunta_respondida.respuesta_correcta
-                recorreccion= getattr(pregunta_respondida, alternativa_correcta)
+                alternativa_correcta = "alternativa_" + pregunta_respondida.respuesta_correcta
+                recorreccion = getattr(pregunta_respondida, alternativa_correcta)
                 messages.error(request, 'Respuesta incorrecta. La respuesta correcta era: ' + recorreccion)
                 stats_tipos[tipo]['total'] += 1
                 
                 incorrectas += 1
                 correctas = 0
 
-
+       
         nivel, correctas, incorrectas = cambiar_nivel(nivel, correctas, incorrectas)
 
         if nivel != nivel_anterior:
             request.session['mostrar_pez'] = True
+            transicion = {nivel_anterior, nivel}
+            ruta_gif = 'cuestionario/gifs/pez.gif'
+
+            if transicion == {'Facil', 'Medio'}:
+                ruta_gif = 'cuestionario/gifs/pez_carga.gif'
+            elif transicion == {'Medio', 'Dificil'}:
+                ruta_gif = 'cuestionario/gifs/2_medusas.gif'
+            elif transicion == {'Dificil', 'Experto'}:
+                ruta_gif = 'cuestionario/gifs/pulpo_baila.gif'
+            
+            request.session['gif_transicion'] = ruta_gif
    
         request.session['nivel'] = nivel
         request.session['correctas'] = correctas
         request.session['incorrectas'] = incorrectas
         request.session['stats_tipos'] = stats_tipos
         return redirect("presentar_preguntas")
+    
     else: 
         for tipo, datos in stats_tipos.items():
             total = datos.get('total', 0)
@@ -115,6 +129,7 @@ def presentar_preguntas(request):
                 'correctas': correctas_tipo,
                 'porcentaje': porcentaje,
             }
+        
         pregunta = obtener_pregunta(nivel)
         context = {
             'pregunta': pregunta,
@@ -123,6 +138,7 @@ def presentar_preguntas(request):
             'incorrectas': incorrectas,
             'stats_tipos': stats_tipos,
             'mostrar_pez': mostrar_pez,
+            'gif_transicion': gif_transicion,
         }
         
         return render(request, 'cuestionario/pregunta.html', context)

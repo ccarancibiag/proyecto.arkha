@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Proyecto Arkha</title>
-
     
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script>
@@ -16,68 +15,59 @@
     <script id="MathJax-script" async 
             src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
-    <style>
-.video-background {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -100; 
-    overflow: hidden;
-}
-
-.fondo-pantalla {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100vw;
-    height: 100vh;
-    transform: translate(-50%, -50%); 
-    object-fit: cover;
-    z-index: -100; 
-}
-
-
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.2); 
-    z-index: -99; 
-}
-    </style>
 
     <style>
 
-     
-        /*  TITULO PIXEL ART ARKHA   */
-       
+        .video-background {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: -100; 
+            overflow: hidden;
+        }
+
+        .fondo-pantalla {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            transform: translate(-50%, -50%); 
+            object-fit: cover;
+            z-index: -100; 
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2); 
+            z-index: -99; 
+        }
+
         @font-face {
             font-family: "PixelFont";
             src: url("https://fonts.cdnfonts.com/s/9423/PressStart2P-Regular.woff") format("woff");
         }
 
         .arkha-title {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 9999;
-    user-select: none;
-}
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 9999;
+            user-select: none;
+        }
 
-.arkha-title img {
-    display: block;
-    max-width: 200px; /* Ajusta este número si el logo queda muy grande o chico */
-    height: auto;
-    image-rendering: pixelated; /* Mantiene los pixeles nítidos */
-}
-
-
-        /*        ESTILOS BASE       */
-     
+        .arkha-title img {
+            display: block;
+            max-width: 200px;
+            height: auto;
+            image-rendering: pixelated;
+        }
 
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -92,10 +82,10 @@
             margin-top: 15px;
         }
 
-        .contenedor {
-          max-width: 750px;
-            margin: auto;
 
+        .contenedor {
+            max-width: 750px;
+            margin: auto;
             margin-top: 25px;
             background-color: transparent; 
             box-shadow: none;              
@@ -107,7 +97,6 @@
             border-image-slice: 40 fill;
             border-image-repeat: round;
             padding: 20px;
-            
 
         }
 
@@ -123,7 +112,6 @@
             box-shadow: 4px 4px 0px rgba(0,0,0,0.2); 
             border-radius: 0;
         }
-
 
 
         .stats-box p {
@@ -142,6 +130,34 @@
 
         .estado p {
             margin: 5px 0;
+        }
+
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .messages li {
+            display: inline-block;
+            font-size: 22px;
+            font-weight: bold;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .messages li.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 2px solid #ef5350;
+        }
+
+        .messages li.success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #66bb6a;
         }
 
         .pregunta {
@@ -266,165 +282,158 @@
 </head>
 
 <body>
-  {% load static %} 
-  <div class="video-background">
-    {% if nivel == "Experto" %}
-        <video autoplay muted loop playsinline class="fondo-pantalla">
-            <source src="{% static 'videos/fondo_arkha.mp4' %}" type="video/mp4">
-        </video>
+    <div class="video-background">
+        {% if nivel == "Facil" or nivel == "Fácil" %}
+            <video autoplay muted loop playsinline class="fondo-pantalla">
+                <source src="{% static 'videos/fondo_arkha.mp4' %}" type="video/mp4">
+            </video>
 
-    {% elif nivel == "Dificil" or nivel == "Difícil" %}
-        <img src="{% static 'cuestionario/gifs/pez_fondo.gif' %}" alt="Fondo Dificil" class="fondo-pantalla">
+        {% elif nivel == "Medio" %}
+            <img src="{% static 'cuestionario/gifs/pez_fondo.gif' %}" alt="Fondo Medio" class="fondo-pantalla">
 
-    {% elif nivel == "Medio" %}
-        <video autoplay muted loop playsinline class="fondo-pantalla">
-            <source src="{% static 'videos/fondo_medio.mp4' %}" type="video/mp4">
-        </video>
-    {% else %}
-        <img src="{% static 'cuestionario/gifs/pez_fondo.gif' %}" alt="Fondo Dificil" class="fondo-pantalla">
-    
-    {% endif %}
+        {% elif nivel == "Dificil" or nivel == "Difícil" %}
+            <img src="{% static 'cuestionario/gifs/3_medusas.gif' %}" alt="Fondo Dificil" class="fondo-pantalla">
 
-    <div class="overlay"></div>
-</div>
+        {% elif nivel == "Experto" %}
+            <img src="{% static 'images/dificil_fondo.png' %}" alt="Fondo Experto" class="fondo-pantalla">
 
+        {% else %}
+            <video autoplay muted loop playsinline class="fondo-pantalla">
+                <source src="{% static 'videos/fondo_arkha.mp4' %}" type="video/mp4">
+            </video>
+        {% endif %}
+
+        <div class="overlay"></div>
+    </div>
 
 {% if mostrar_pez %}
-    <div class="pantalla-completa">
         
-        <div class="contenido-centro">
-            <h1 style="font-size: 3em; color: #4a148c; text-shadow: 2px 2px 0px white;">
-                ¡CAMBIO DE NIVEL!
-            </h1>
+        {% if 'pulpo' in gif_transicion or 'medusas' in gif_transicion %}
             
-                <img src="{% static 'cuestionario/gifs/pez_carga.gif' %}"
-                 alt="Celebración" 
-                 style="width: 300px; height: auto;">
-                 
-            <h2 style="font-size: 2em; color: #333;">
-                Ahora estás en: <span style="color: #4a90e2;">{{ nivel }}</span>
-            </h2>
+            <div class="pantalla-completa" style="background-color: #111122;"> 
+                <div class="contenido-centro">
+                    <h1 style="font-size: 3em; color: #ffffff; text-shadow: 0px 0px 10px #4a148c;">
+                        ¡CAMBIO DE NIVEL!
+                    </h1>
+                    
+                    <img src="{% static gif_transicion %}" 
+                         alt="Animación Nivel" 
+                         style="width: 600px; max-width: 90%; height: auto; image-rendering: pixelated;">
+                         
+                    <h2 style="font-size: 2em; color: #ffffff;">
+                        Ahora estás en: <span style="color: #4fc3f7;">{{ nivel }}</span>
+                    </h2>
+                </div>
+            </div>
+
+        {% else %}
+
+            <div class="pantalla-completa" style="background-color: rgba(255, 255, 255, 0.95);">
+                <div class="contenido-centro">
+                    <h1 style="font-size: 3em; color: #4a148c; text-shadow: 2px 2px 0px white;">
+                        ¡CAMBIO DE NIVEL!
+                    </h1>
+                    
+                    <img src="{% static gif_transicion %}" 
+                         alt="Animación Nivel" 
+                         style="width: 600px; max-width: 90%; height: auto; image-rendering: pixelated;">
+                         
+                    <h2 style="font-size: 2em; color: #333;">
+                        Ahora estás en: <span style="color: #4a90e2;">{{ nivel }}</span>
+                    </h2>
+                </div>
+            </div>
+
+        {% endif %}
+
+        <style>
+            .pantalla-completa {
+                position: fixed;       
+                top: 0;
+                left: 0;
+                width: 100%;          
+                height: 100%;       
+                z-index: 99999;       
+                display: flex;         
+                justify-content: center;
+                align-items: center;
+                animation: desaparecer 4s forwards; 
+            }
+            
+            .contenido-centro {
+                text-align: center;
+                animation: rebote 0.5s infinite alternate; 
+            }
+
+            @keyframes desaparecer {
+                0%   { opacity: 1; }
+                70%  { opacity: 1; }  
+                100% { opacity: 0; visibility: hidden; } 
+            }
+        </style>
+    {% endif %}
+
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="arkha-title">
+        <img src="{% static 'cuestionario/gifs/arkha_logo.gif' %}" alt="Arkha Logo">
+    </div>
+
+    <div class="stats-box">
+        {% for tipo, datos in stats_tipos.items %}
+            <p>{{ tipo }}: {{ datos.porcentaje|floatformat:0 }}% ({{ datos.correctas }}/{{ datos.total }})</p>
+        {% endfor %}
+    </div>
+
+    <div class="contenedor">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <h1>Pregunta</h1>
+
+        <div class="estado">
+            <p><strong>Nivel Actual:</strong> {{ nivel }}</p>
+            <p><strong>Racha de Respuestas:</strong></p>
+            <p>✓ Correctas: {{ correctas }}</p>
+            <p>✗ Incorrectas: {{ incorrectas }}</p>
         </div>
 
+        {% if pregunta %}
+            <div class="pregunta">
+                <h3>{{ pregunta.pregunta | safe }}</h3>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
+
+                    <ul class="alternativas">
+                        <li><label><input type="radio" name="respuesta" value="A"> {{ pregunta.alternativa_A|safe }}</label></li>
+                        <li><label><input type="radio" name="respuesta" value="B"> {{ pregunta.alternativa_B|safe }}</label></li>
+                        <li><label><input type="radio" name="respuesta" value="C"> {{ pregunta.alternativa_C|safe }}</label></li>
+                        <li><label><input type="radio" name="respuesta" value="D"> {{ pregunta.alternativa_D|safe }}</label></li>
+                    </ul>
+
+                    <button type="submit">Enviar Respuesta</button>
+                </form>
+            </div>
+        {% else %}
+            <h2>No hay preguntas para este nivel</h2>
+        {% endif %}
     </div>
 
-    <style>
-       
-        .pantalla-completa {
-            position: fixed;       
-            top: 0;
-            left: 0;
-            width: 100%;          
-            height: 100%;       
-            background-color: rgba(255, 255, 255, 0.95); 
-            z-index: 99999;       
-            
-           
-            display: flex;         
-            justify-content: center;
-            align-items: center;
-            animation: desaparecer 4s forwards; 
-        }
-
-        .contenido-centro {
-            text-align: center;
-            animation: rebote 0.5s infinite alternate; 
-        }
-
-        @keyframes desaparecer {
-            0%   { opacity: 1; }
-            70%  { opacity: 1; }  
-            100% { opacity: 0; visibility: hidden; } 
-        }
-    </style>
-{% endif %}
-
-<div class="content">
-    {% block content %}
-    {% endblock %}
-</div>
-
-<div class="arkha-title">
-    <img src="{% static 'cuestionario/gifs/arkha_logo.gif' %}" alt="Arkha Logo">
-</div>
-
-<div class="stats-box">
-    {% for tipo, datos in stats_tipos.items %}
-        <p>{{ tipo }}: {{ datos.porcentaje }}% ({{ datos.correctas }}/{{ datos.total }})</p>
-    {% endfor %}
-</div>
-
-<div class="contenedor">
-
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li class="{{ message.tags }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-
-    <h1>Pregunta</h1>
-
-
-      <style>
-        .alerta-pez {
-            text-align: center; 
-            margin: 20px auto; 
-            padding: 15px; 
-            border-radius: 8px; 
-            border: 2px solid #6a0dad; 
-            background: #f3e5f5; 
-            max-width: 400px;
-            animation: desaparecer 5s forwards; 
-        }
-
-        @keyframes desaparecer {
-            0% { opacity: 1; }
-            80% { opacity: 1; } 
-            100% { opacity: 0; visibility: hidden; } 
-        }
-      </style>
-
-    
-
-    <div class="estado">
-        <p><strong>Nivel Actual:</strong> {{ nivel }}</p>
-        <p><strong>Racha de Respuestas:</strong></p>
-        <p>✓ Correctas: {{ correctas }}</p>
-        <p>✗ Incorrectas: {{ incorrectas }}</p>
+    <div class="reiniciar">
+        <a href="/reiniciar/">
+            <button class="btn-red">Reiniciar cuestionario</button>
+        </a>
     </div>
-
-    {% if pregunta %}
-    <div class="pregunta">
-        <h3>{{ pregunta.pregunta | safe }}</h3>
-
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="pregunta_id" value="{{ pregunta.id }}">
-
-            <ul class="alternativas">
-                <li><label><input type="radio" name="respuesta" value="A"> {{ pregunta.alternativa_A|safe }}</label></li>
-                <li><label><input type="radio" name="respuesta" value="B"> {{ pregunta.alternativa_B|safe }}</label></li>
-                <li><label><input type="radio" name="respuesta" value="C"> {{ pregunta.alternativa_C|safe }}</label></li>
-                <li><label><input type="radio" name="respuesta" value="D"> {{ pregunta.alternativa_D|safe }}</label></li>
-            </ul>
-
-            <button type="submit">Enviar Respuesta</button>
-        </form>
-    </div>
-
-    {% else %}
-        <h2>No hay preguntas para este nivel</h2>
-    {% endif %}
-</div>
-
-<div class="reiniciar">
-    <a href="/reiniciar/">
-        <button class="btn-red">Reiniciar cuestionario</button>
-    </a>
-</div>
 
 </body>
 </html>
-
